@@ -7,8 +7,8 @@
 - ./vendor/bin/sail php artisan migrate
 
 ## demo data ha kell
--  ./vendor/bin/sail php artisan db:seed
-            'name' => 'falatozz',
-            'email' => 'api@falatozz.hu',
-            'email_verified_at' => now(),
-            'password' => Hash::make('falatozz'),
+- ./vendor/bin/sail php artisan db:seed
+- 'name' => 'falatozz',
+- 'email' => 'api@falatozz.hu',
+- 'email_verified_at' => now(),
+- 'password' => Hash::make('falatozz'),
