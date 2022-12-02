@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    protected $model;
+
+    public function __construct(Product $model)
+    {
+        $this->model = $model;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,28 +21,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        $products = Product::paginate(10)->all();
+        return response()->json($products);
     }
 
     /**
@@ -45,40 +33,44 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = $this->model->where('id', $id)->first();
+        return response()->json($product);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function store(Request $request)
     {
-        //
+        $this->validate(
+            $request,
+            [
+                'name' => 'required',
+                'price' => 'required|min:1|number',
+            ]
+        );
+        $product = $this->model->create($request->all());
+
+        return response()->json($product);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $product = $this->model->where('id', $id)->firstOrFail();
+        $rules = [
+            'name' => 'required',
+            'price' => 'required|min:1|number',
+        ];
+
+        $this->validate($request, $rules);
+
+        $product->update($request->except('_token', 'password'));
+
+        return response()->json($product);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $product = $this->model->where('id', $id)->firstOrFail();
+        $product->delete();
+
+        return response()->json(null, 204);
     }
 }
