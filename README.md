@@ -12,3 +12,11 @@
 - 'email' => 'api@falatozz.hu',
 - 'email_verified_at' => now(),
 - 'password' => Hash::make('falatozz'),
+
+
+## Lara CORS
+
+```
+SANCTUM_STATEFUL_DOMAINS=.localhost,.localhost:3000
+SESSION_DOMAIN=localhost
+```
