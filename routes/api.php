@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Api\ProductController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,11 +18,4 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('products')->group(
-    function () {
-        // http://localhost/api/products
-        Route::get('/', [ProductController::class, 'index'])->name('products');
-        // http://localhost/api/products/18
-        Route::get('/{id}', [ProductController::class, 'show'])->name('oneProduct');
-    }
-);
+Route::apiResource('products', ProductController::class);
